@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Chronométré - Industries Alimentaires</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        #timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .question-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            text-align: left;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .options button:hover {
+            background: #e9ecef;
+        }
+        .correct {
+            background: #d4edda !important;
+            border-color: #c3e6cb;
+        }
+        .incorrect {
+            background: #f8d7da !important;
+            border-color: #f5c6cb;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .score {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">Temps restant: 40:00</div>
+    <div id="quiz">
+        <div id="questions"></div>
+        <div id="result" class="hidden">
+            <div class="score">Score final: <span id="final-score">0</span>/20</div>
+            <button onclick="location.reload()">Recommencer</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration du quiz
+        const questions = [
+            {
+                question: "Quelle est la définition d'un aliment ?",
+                options: [
+                    "Substance chimique pure",
+                    "Produit transformé uniquement destiné à l'énergie",
+                    "Substance consommée pour fournir énergie et nutriments",
+                    "Produit synthétique enrichi en vitamines"
+                ],
+                correct: 2,
+                explanation: "Un aliment est une substance consommée pour fournir énergie et nutriments."
+            },
+            // Ajouter les 19 autres questions ici...
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 40 * 60; // 40 minutes en secondes
+        let timerId;
+
+        // Fonctions du timer
+        function startTimer() {
+            timerId = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `Temps restant: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerId);
+                    alert('Temps écoulé ! Le quiz va redémarrer.');
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        // Fonctions du quiz
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            const questionHTML = `
+                <div class="question-container">
+                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
+                    <p>${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((option, index) => `
+                            <button onclick="handleAnswer(${index})">${option}</button>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${currentQuestion}" class="feedback hidden"></div>
+                </div>
+            `;
+            document.getElementById('questions').innerHTML = questionHTML;
+        }
+
+        function handleAnswer(selectedIndex) {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById(`feedback-${currentQuestion}`);
+            const buttons = document.querySelectorAll('.options button');
+
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if(selectedIndex === q.correct) {
+                score++;
+                buttons[selectedIndex].classList.add('correct');
+                feedback.innerHTML = `<div class="correct">✅ Correct! ${q.explanation}</div>`;
+            } else {
+                buttons[selectedIndex].classList.add('incorrect');
+                buttons[q.correct].classList.add('correct');
+                feedback.innerHTML = `
+                    <div class="incorrect">❌ Incorrect. 
+                    <br>La bonne réponse était : <strong>${q.options[q.correct]}</strong>
+                    <br>${q.explanation}</div>
+                `;
+            }
+
+            feedback.classList.remove('hidden');
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if(currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showFinalResult();
+                }
+            }, 2500);
+        }
+
+        function showFinalResult() {
+            clearInterval(timerId);
+            document.getElementById('quiz').innerHTML = `
+                <div id="result">
+                    <div class="score">Score final: <span id="final-score">${score}</span>/20</div>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px;">Recommencer</button>
+                </div>
+            `;
+        }
+
+        // Initialisation
+        showQuestion();
+        startTimer();
+    </script>
+</body>
+</html>
