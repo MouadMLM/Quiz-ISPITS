@@ -2,24 +2,14 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Chronométré - Industries Alimentaires</title>
+    <title>Quiz Industries Alimentaires</title>
     <style>
+        /* Styles précédents inchangés */
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-        }
-        #timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #dc3545;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1.2em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .question-container {
             background: #f8f9fa;
@@ -68,10 +58,20 @@
         .hidden {
             display: none;
         }
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2em;
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <div id="timer">Temps restant: 40:00</div>
+    <div class="timer" id="timer">40:00</div>
     <div id="quiz">
         <div id="questions"></div>
         <div id="result" class="hidden">
@@ -81,8 +81,8 @@
     </div>
 
     <script>
-        // Configuration du quiz
         const questions = [
+            // Partie QCM (1-10)
             {
                 question: "Quelle est la définition d'un aliment ?",
                 options: [
@@ -94,7 +94,217 @@
                 correct: 2,
                 explanation: "Un aliment est une substance consommée pour fournir énergie et nutriments."
             },
-            // Ajouter les 19 autres questions ici...
+            {
+                question: "Quelle méthode de conservation utilise une température entre 135 et 150°C pendant 1 à 5 secondes ?",
+                options: [
+                    "Pasteurisation",
+                    "Stérilisation",
+                    "Traitement UHT",
+                    "Lyophilisation"
+                ],
+                correct: 2,
+                explanation: "Le traitement UHT (Ultra Haute Température) est utilisé pour la conservation longue durée."
+            },
+            {
+                question: "Quel microorganisme est responsable du botulisme ?",
+                options: [
+                    "Salmonella spp.",
+                    "Clostridium botulinum",
+                    "Escherichia coli",
+                    "Listeria monocytogenes"
+                ],
+                correct: 1,
+                explanation: "Clostridium botulinum produit la toxine botulique responsable du botulisme."
+            },
+            {
+                question: "Quel facteur intrinsèque limite le développement des microorganismes dans un aliment ?",
+                options: [
+                    "La couleur",
+                    "Le pH",
+                    "L’emballage",
+                    "La température ambiante"
+                ],
+                correct: 1,
+                explanation: "Le pH acide ou basique peut inhiber la croissance microbienne."
+            },
+            {
+                question: "Quelle est la température idéale pour la congélation des aliments ?",
+                options: [
+                    "0°C",
+                    "-18°C",
+                    "4°C",
+                    "-5°C"
+                ],
+                correct: 1,
+                explanation: "La congélation se fait à -18°C pour une conservation optimale."
+            },
+            {
+                question: "Quelle substance antimicrobienne naturelle est présente dans l’ail ?",
+                options: [
+                    "Lysozyme",
+                    "Allicine",
+                    "Coumarine",
+                    "Polyphénols"
+                ],
+                correct: 1,
+                explanation: "L'ail contient de l'allicine aux propriétés antimicrobiennes."
+            },
+            {
+                question: "Quelle méthode des « 5 M » concerne le personnel et l’hygiène ?",
+                options: [
+                    "Matériel",
+                    "Méthode",
+                    "Milieu",
+                    "Main-d’œuvre"
+                ],
+                correct: 3,
+                explanation: "Le 'Main-d’œuvre' fait référence au personnel et à leurs pratiques d'hygiène."
+            },
+            {
+                question: "Quel niveau d’irradiation permet de stériliser les aliments en détruisant bactéries et virus ?",
+                options: [
+                    "Radurisation (<1 kGy)",
+                    "Radicidation (1-10 kGy)",
+                    "Radiopertisation (>10 kGy)",
+                    "Aucun des trois"
+                ],
+                correct: 2,
+                explanation: "La radiopertisation utilise des doses supérieures à 10 kGy pour stériliser."
+            },
+            {
+                question: "Quel critère de qualité alimentaire concerne l’absence de composés toxiques ?",
+                options: [
+                    "Nutritionnel",
+                    "Organoleptique",
+                    "Hygiénique",
+                    "Commercial"
+                ],
+                correct: 2,
+                explanation: "Le critère hygiénique garantit la sécurité sanitaire des aliments."
+            },
+            {
+                question: "Quel procédé de conservation réduit l’activité de l’eau (aw) ?",
+                options: [
+                    "Pasteurisation",
+                    "Séchage",
+                    "Congélation",
+                    "Emballage sous vide"
+                ],
+                correct: 1,
+                explanation: "Le séchage diminue l'eau disponible pour les microorganismes."
+            },
+
+            // Questions ajoutées (11-20)
+            {
+                question: "Citez deux rôles des aliments.",
+                options: [
+                    "Fournir de l'énergie et des nutriments",
+                    "Colorer et aromatiser",
+                    "Décorer et emballer",
+                    "Conserver et transporter"
+                ],
+                correct: 0,
+                explanation: "Les aliments fournissent énergie et nutriments essentiels."
+            },
+            {
+                question: "Quelle est la différence entre un aliment et un nutriment ?",
+                options: [
+                    "L'aliment est composé de nutriments",
+                    "Le nutriment est synthétique",
+                    "Aucune différence",
+                    "L'aliment est une molécule simple"
+                ],
+                correct: 0,
+                explanation: "Les aliments contiennent des nutriments qui sont assimilés par l'organisme."
+            },
+            {
+                question: "Nommez trois agents d’altération des aliments.",
+                options: [
+                    "Microbes, enzymes, oxygène",
+                    "Couleurs, saveurs, textures",
+                    "Emballages, températures, pH",
+                    "Vitamines, minéraux, protéines"
+                ],
+                correct: 0,
+                explanation: "Les principaux agents d'altération sont biologiques, chimiques et physiques."
+            },
+            {
+                question: "Quels sont les trois types d’interactions entre bactéries dans les aliments ?",
+                options: [
+                    "Mutualisme, compétition, antagonisme",
+                    "Synergie, neutralité, coloration",
+                    "Croissance, division, sporulation",
+                    "Aucune interaction n'existe"
+                ],
+                correct: 0,
+                explanation: "Les bactéries interagissent par coopération, compétition ou inhibition."
+            },
+            {
+                question: "Quels facteurs environnementaux favorisent la croissance microbienne ?",
+                options: [
+                    "Température ambiante, humidité, pH neutre",
+                    "Lumière vive, sécheresse, froid",
+                    "Vide d'air, rayonnement, acidité",
+                    "Oxygène pur, obscurité, chaleur sèche"
+                ],
+                correct: 0,
+                explanation: "Conditions idéales : température modérée, humidité et pH neutre."
+            },
+            {
+                question: "Qu’est-ce que l’activité de l’eau (aw) ?",
+                options: [
+                    "Quantité d'eau disponible pour les réactions chimiques",
+                    "Quantité totale d'eau dans l'aliment",
+                    "pH de l'eau contenue",
+                    "Aucune de ces réponses"
+                ],
+                correct: 0,
+                explanation: "L'aw mesure l'eau libre utilisable par les microorganismes."
+            },
+            {
+                question: "Quels sont les buts principaux des industries alimentaires ?",
+                options: [
+                    "Sécurité, qualité, conservation",
+                    "Prix bas, rapidité, marketing",
+                    "Couleur vive, texture molle, goût sucré",
+                    "Aucun de ces choix"
+                ],
+                correct: 0,
+                explanation: "Les priorités sont la sécurité sanitaire et la qualité des produits."
+            },
+            {
+                question: "Citez deux méthodes de conservation par la chaleur.",
+                options: [
+                    "Pasteurisation et stérilisation",
+                    "Congélation et lyophilisation",
+                    "Irradiation et séchage",
+                    "Salage et fumage"
+                ],
+                correct: 0,
+                explanation: "Les méthodes thermiques incluent pasteurisation (chaleur modérée) et stérilisation (haute température)."
+            },
+            {
+                question: "Quelles sont les conséquences d’une contamination microbienne ?",
+                options: [
+                    "Altération du produit et risques sanitaires",
+                    "Amélioration du goût",
+                    "Augmentation de la valeur nutritive",
+                    "Aucun effet notable"
+                ],
+                correct: 0,
+                explanation: "La contamination peut rendre l'aliment dangereux ou impropre à la consommation."
+            },
+            {
+                question: "Quel est le rôle du système HACCP ?",
+                options: [
+                    "Identifier et contrôler les dangers alimentaires",
+                    "Améliorer le goût des produits",
+                    "Réduire les coûts de production",
+                    "Accélérer le processus de fabrication"
+                ],
+                correct: 0,
+                explanation: "L'HACCP est un système de gestion de la sécurité alimentaire."
+            }
         ];
 
         let currentQuestion = 0;
@@ -102,39 +312,28 @@
         let timeLeft = 40 * 60; // 40 minutes en secondes
         let timerId;
 
-        // Fonctions du timer
         function startTimer() {
             timerId = setInterval(() => {
                 timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('timer').textContent = 
-                    `Temps restant: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-                if(timeLeft <= 0) {
-                    clearInterval(timerId);
-                    alert('Temps écoulé ! Le quiz va redémarrer.');
-                    location.reload();
-                }
+                updateTimer();
+                if(timeLeft <= 0) endQuiz();
             }, 1000);
         }
 
-        // Fonctions du quiz
-        function showQuestion() {
-            const q = questions[currentQuestion];
-            const questionHTML = `
-                <div class="question-container">
-                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
-                    <p>${q.question}</p>
-                    <div class="options">
-                        ${q.options.map((option, index) => `
-                            <button onclick="handleAnswer(${index})">${option}</button>
-                        `).join('')}
-                    </div>
-                    <div id="feedback-${currentQuestion}" class="feedback hidden"></div>
-                </div>
-            `;
-            document.getElementById('questions').innerHTML = questionHTML;
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            timeLeft = 40 * 60;
+            clearInterval(timerId);
+            startTimer();
+            showQuestion();
         }
 
         function handleAnswer(selectedIndex) {
@@ -148,41 +347,53 @@
                 score++;
                 buttons[selectedIndex].classList.add('correct');
                 feedback.innerHTML = `<div class="correct">✅ Correct! ${q.explanation}</div>`;
+                
+                setTimeout(() => {
+                    currentQuestion++;
+                    if(currentQuestion < questions.length) showQuestion();
+                    else endQuiz();
+                }, 1500);
             } else {
                 buttons[selectedIndex].classList.add('incorrect');
                 buttons[q.correct].classList.add('correct');
                 feedback.innerHTML = `
                     <div class="incorrect">❌ Incorrect. 
                     <br>La bonne réponse était : <strong>${q.options[q.correct]}</strong>
-                    <br>${q.explanation}</div>
-                `;
+                    <br>${q.explanation}</div>`;
+                
+                setTimeout(resetQuiz, 3000);
             }
-
             feedback.classList.remove('hidden');
-            
-            setTimeout(() => {
-                currentQuestion++;
-                if(currentQuestion < questions.length) {
-                    showQuestion();
-                } else {
-                    showFinalResult();
-                }
-            }, 2500);
         }
 
-        function showFinalResult() {
+        function endQuiz() {
             clearInterval(timerId);
             document.getElementById('quiz').innerHTML = `
                 <div id="result">
                     <div class="score">Score final: <span id="final-score">${score}</span>/20</div>
                     <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px;">Recommencer</button>
-                </div>
-            `;
+                </div>`;
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            const questionHTML = `
+                <div class="question-container">
+                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
+                    <p>${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((option, index) => `
+                            <button onclick="handleAnswer(${index})">${option}</button>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${currentQuestion}" class="feedback hidden"></div>
+                </div>`;
+            document.getElementById('questions').innerHTML = questionHTML;
         }
 
         // Initialisation
-        showQuestion();
         startTimer();
+        showQuestion();
     </script>
 </body>
 </html>
