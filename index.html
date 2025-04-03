@@ -307,10 +307,38 @@
             }
         ];
 
+        let shuffledQuestions = [];
         let currentQuestion = 0;
         let score = 0;
-        let timeLeft = 40 * 60; // 40 minutes en secondes
+        let timeLeft = 40 * 60;
         let timerId;
+
+        // Fonction de mélange aléatoire
+        function shuffleArray(array) {
+            const arr = array.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Préparation des questions mélangées
+        function prepareQuestions() {
+            // Mélanger l'ordre des questions
+            shuffledQuestions = shuffleArray(questions);
+            
+            // Mélanger les options pour chaque question
+            shuffledQuestions = shuffledQuestions.map(q => {
+                const originalCorrectAnswer = q.options[q.correct];
+                const shuffledOptions = shuffleArray(q.options);
+                return {
+                    ...q,
+                    options: shuffledOptions,
+                    correct: shuffledOptions.indexOf(originalCorrectAnswer)
+                };
+            });
+        }
 
         function startTimer() {
             timerId = setInterval(() => {
@@ -392,6 +420,7 @@
         }
 
         // Initialisation
+        prepareQuestions(); // Premier mélange
         startTimer();
         showQuestion();
     </script>
