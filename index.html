@@ -4,70 +4,17 @@
     <meta charset="UTF-8">
     <title>Quiz Industries Alimentaires</title>
     <style>
-        /* Styles précédents inchangés */
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .question-container {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .options button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 12px;
-            text-align: left;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .options button:hover {
-            background: #e9ecef;
-        }
-        .correct {
-            background: #d4edda !important;
-            border-color: #c3e6cb;
-        }
-        .incorrect {
-            background: #f8d7da !important;
-            border-color: #f5c6cb;
-        }
-        .feedback {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .score {
-            font-size: 1.5em;
-            margin: 20px 0;
-            padding: 15px;
-            background: #007bff;
-            color: white;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .hidden {
-            display: none;
-        }
-        .timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 1.2em;
-            background: #dc3545;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
+        /* Styles CSS inchangés */
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        .question-container { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .options button { display: block; width: 100%; margin: 10px 0; padding: 12px; text-align: left; border: 2px solid #dee2e6; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s; }
+        .options button:hover { background: #e9ecef; }
+        .correct { background: #d4edda !important; border-color: #c3e6cb; }
+        .incorrect { background: #f8d7da !important; border-color: #f5c6cb; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; }
+        .score { font-size: 1.5em; margin: 20px 0; padding: 15px; background: #007bff; color: white; border-radius: 8px; text-align: center; }
+        .hidden { display: none; }
+        .timer { position: fixed; top: 20px; right: 20px; font-size: 1.2em; background: #dc3545; color: white; padding: 10px 20px; border-radius: 5px; }
     </style>
 </head>
 <body>
