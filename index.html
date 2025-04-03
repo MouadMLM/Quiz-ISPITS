@@ -7,21 +7,30 @@
         /* Styles précédents inchangés */
         body {
             font-family: Arial, sans-serif;
+            font-size: 20px;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
         }
+        .note {
+            font-size: 26px;
+            color: #FF0000;
+        }
         .question-container {
+            
             background: #f8f9fa;
+            font-size: 35px;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .options button {
             display: block;
             width: 100%;
             margin: 10px 0;
+            font-size: 35px;
             padding: 12px;
             text-align: left;
             border: 2px solid #dee2e6;
@@ -62,7 +71,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            font-size: 1.2em;
+            font-size: 50px;
             background: #dc3545;
             color: white;
             padding: 10px 20px;
@@ -71,18 +80,24 @@
     </style>
 </head>
 <body>
-    <div class="timer" id="timer">40:00</div>
-    <div id="quiz">
-        <div id="questions"></div>
-        <div id="result" class="hidden">
-            <div class="score">Score final: <span id="final-score">0</span>/20</div>
-            <button onclick="location.reload()">Recommencer</button>
-        </div>
+    <div class="timer" id="timer">30:00</div>
+    
+    
+<div id="quiz">
+    <div id="questions"></div>
+    <div id="result" class="hidden">
+        <div class="score">Score final: <span id="final-score">0</span>/20</div>
+        <button onclick="location.reload()">Recommencer</button>
     </div>
-
+</div>
+    
     <script>
+    
+    
+    
+    
         const questions = [
-            // Partie QCM (1-10)
+            
             {
                 question: "Quelle est la définition d'un aliment ?",
                 options: [
@@ -194,7 +209,7 @@
                 explanation: "Le séchage diminue l'eau disponible pour les microorganismes."
             },
 
-            // Questions ajoutées (11-20)
+            
             {
                 question: "Citez deux rôles des aliments.",
                 options: [
@@ -306,11 +321,17 @@
                 explanation: "L'HACCP est un système de gestion de la sécurité alimentaire."
             }
         ];
+    
+    
+    
+    
+    
+    
 
         let shuffledQuestions = [];
         let currentQuestion = 0;
         let score = 0;
-        let timeLeft = 40 * 60;
+        let timeLeft = 30 * 60;
         let timerId;
 
         // Algorithme Fisher-Yates pour mélange aléatoire
@@ -340,12 +361,12 @@
         }
 
         function startTimer() {
-            timerId = setInterval(() => {
-                timeLeft--;
-                updateTimer();
-                if(timeLeft <= 0) endQuiz();
-            }, 1000);
-        }
+    timerId = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if(timeLeft <= 0) resetQuiztime(); // Restart on timeout
+    }, 1000);
+}
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -354,15 +375,31 @@
                 `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        function resetQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            timeLeft = 40 * 60;
-            clearInterval(timerId);
-            prepareQuestions();
-            startTimer();
-            showQuestion();
-        }
+function resetQuiz() {
+    currentQuestion = 0 ;
+    score = 0;
+    timeLeft =  timeLeft - 60;
+    clearInterval(timerId);
+    prepareQuestions();
+    startTimer();
+    // Immediately update the timer display
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('questions').classList.remove('hidden');
+    showQuestion();
+}
+    function resetQuiztime() {
+    currentQuestion = 0;
+    score = 0;
+    timeLeft =  30 * 60 ;
+    clearInterval(timerId);
+    prepareQuestions();
+    startTimer();
+    updateTimer();
+    // Immediately update the timer display
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('questions').classList.remove('hidden');
+    showQuestion();
+}
 
         function handleAnswer(selectedIndex) {
             const q = shuffledQuestions[currentQuestion];
@@ -380,7 +417,7 @@
                     currentQuestion++;
                     if(currentQuestion < shuffledQuestions.length) showQuestion();
                     else endQuiz();
-                }, 1500);
+                }, 2500);
             } else {
                 buttons[selectedIndex].classList.add('incorrect');
                 buttons[q.correct].classList.add('correct');
@@ -389,19 +426,17 @@
                     <br>La bonne réponse était : <strong>${q.options[q.correct]}</strong>
                     <br>${q.explanation}</div>`;
                 
-                setTimeout(resetQuiz, 3000);
+                setTimeout(resetQuiz, 4500);
             }
             feedback.classList.remove('hidden');
         }
 
         function endQuiz() {
-            clearInterval(timerId);
-            document.getElementById('quiz').innerHTML = `
-                <div id="result">
-                    <div class="score">Score final: <span id="final-score">${score}</span>/20</div>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px;">Recommencer</button>
-                </div>`;
-        }
+             clearInterval(timerId);
+             document.getElementById('questions').classList.add('hidden');
+             document.getElementById('result').classList.remove('hidden');
+             document.getElementById('final-score').textContent = score;
+          }
 
         function showQuestion() {
             const q = shuffledQuestions[currentQuestion];
@@ -424,5 +459,17 @@
         startTimer();
         showQuestion();
     </script>
+    <style>
+  .box {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    margin-bottom: 20px; /* Adds space below each div */
+  }
+</style>
+
+
+<div class="box"></div>
+    <div class="note"> <strong>* Une mauvaise réponse =  (-1 min ) du temps restant.</strong></div>
 </body>
 </html>
