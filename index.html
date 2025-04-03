@@ -307,10 +307,33 @@
             }
         ];
 
+        let shuffledQuestions = [];
         let currentQuestion = 0;
         let score = 0;
-        let timeLeft = 40 * 60; // 40 minutes en secondes
+        let timeLeft = 40 * 60;
         let timerId;
+
+        // Fonction de mélange aléatoire
+        function shuffleArray(array) {
+            return array.slice().sort(() => Math.random() - 0.5);
+        }
+
+        // Préparation des questions mélangées
+        function prepareQuestions() {
+            // Mélanger l'ordre des questions
+            shuffledQuestions = shuffleArray(originalQuestions);
+            
+            // Mélanger les options pour chaque question
+            shuffledQuestions = shuffledQuestions.map(q => {
+                const originalCorrect = q.correct;
+                const shuffledOptions = shuffleArray(q.options);
+                return {
+                    ...q,
+                    options: shuffledOptions,
+                    correct: shuffledOptions.indexOf(q.options[originalCorrect])
+                };
+            });
+        }
 
         function startTimer() {
             timerId = setInterval(() => {
@@ -332,12 +355,13 @@
             score = 0;
             timeLeft = 40 * 60;
             clearInterval(timerId);
+            prepareQuestions(); // Nouveau mélange
             startTimer();
             showQuestion();
         }
 
         function handleAnswer(selectedIndex) {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             const feedback = document.getElementById(`feedback-${currentQuestion}`);
             const buttons = document.querySelectorAll('.options button');
 
@@ -350,7 +374,7 @@
                 
                 setTimeout(() => {
                     currentQuestion++;
-                    if(currentQuestion < questions.length) showQuestion();
+                    if(currentQuestion < shuffledQuestions.length) showQuestion();
                     else endQuiz();
                 }, 1500);
             } else {
@@ -376,10 +400,10 @@
         }
 
         function showQuestion() {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             const questionHTML = `
                 <div class="question-container">
-                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
+                    <h3>Question ${currentQuestion + 1}/${shuffledQuestions.length}</h3>
                     <p>${q.question}</p>
                     <div class="options">
                         ${q.options.map((option, index) => `
@@ -392,8 +416,8 @@
         }
 
         // Initialisation
+        prepareQuestions(); // Premier mélange
         startTimer();
         showQuestion();
-    </script>
 </body>
 </html>
