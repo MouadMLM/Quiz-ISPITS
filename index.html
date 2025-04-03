@@ -313,7 +313,7 @@
         let timeLeft = 40 * 60;
         let timerId;
 
-        // Fonction de mélange aléatoire
+        // Algorithme Fisher-Yates pour mélange aléatoire
         function shuffleArray(array) {
             const arr = array.slice();
             for (let i = arr.length - 1; i > 0; i--) {
@@ -323,19 +323,18 @@
             return arr;
         }
 
-        // Préparation des questions mélangées
         function prepareQuestions() {
             // Mélanger l'ordre des questions
             shuffledQuestions = shuffleArray(questions);
             
-            // Mélanger les options pour chaque question
-            shuffledQuestions = shuffledQuestions.map(q => {
-                const originalCorrectAnswer = q.options[q.correct];
-                const shuffledOptions = shuffleArray(q.options);
+            // Mélanger les options et mettre à jour les bonnes réponses
+            shuffledQuestions = shuffledQuestions.map(question => {
+                const originalCorrect = question.options[question.correct];
+                const shuffledOptions = shuffleArray(question.options);
                 return {
-                    ...q,
+                    ...question,
                     options: shuffledOptions,
-                    correct: shuffledOptions.indexOf(originalCorrectAnswer)
+                    correct: shuffledOptions.indexOf(originalCorrect)
                 };
             });
         }
@@ -360,12 +359,13 @@
             score = 0;
             timeLeft = 40 * 60;
             clearInterval(timerId);
+            prepareQuestions();
             startTimer();
             showQuestion();
         }
 
         function handleAnswer(selectedIndex) {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             const feedback = document.getElementById(`feedback-${currentQuestion}`);
             const buttons = document.querySelectorAll('.options button');
 
@@ -378,7 +378,7 @@
                 
                 setTimeout(() => {
                     currentQuestion++;
-                    if(currentQuestion < questions.length) showQuestion();
+                    if(currentQuestion < shuffledQuestions.length) showQuestion();
                     else endQuiz();
                 }, 1500);
             } else {
@@ -404,10 +404,10 @@
         }
 
         function showQuestion() {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             const questionHTML = `
                 <div class="question-container">
-                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
+                    <h3>Question ${currentQuestion + 1}/${shuffledQuestions.length}</h3>
                     <p>${q.question}</p>
                     <div class="options">
                         ${q.options.map((option, index) => `
@@ -420,7 +420,7 @@
         }
 
         // Initialisation
-        prepareQuestions(); // Premier mélange
+        prepareQuestions();
         startTimer();
         showQuestion();
     </script>
