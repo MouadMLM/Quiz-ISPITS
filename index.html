@@ -4,17 +4,35 @@
     <meta charset="UTF-8">
     <title>Quiz Industries Alimentaires</title>
     <style>
-        /* Styles précédents inchangés */
+
         body {
             font-family: Arial, sans-serif;
             font-size: 20px;
+            height: 1800px;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
+            background: linear-gradient(#47ab30, #ffa6a6);
+        }
+        .Title {
+            font-size: 50px;
+            text-align: center;
+            color: #fefefe;
+            
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+
+            margin-bottom: 20px;
+            border-radius: 20px;
         }
         .note {
             font-size: 26px;
-            color: #FF0000;
+            color: #ffffff;
+            background-color: rgba(195, 20, 20, 0.919);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 20px 30px 20px 30px;
+            margin-bottom: 20px;
+            margin: 10px ;
+            border-radius: 20px;
         }
         .question-container {
             
@@ -72,28 +90,37 @@
             top: 20px;
             right: 60px;
             font-size: 50px;
-            background: #dc3545;
+            background: #ea1a2f;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
         }
+
+        .box {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px; /* Adds space below each div */
+          }
+
     </style>
 </head>
 <body>
+    <div class="box"></div>
+    <div class="Title"><b>Quiz Industries Alimentaires</b></div>
     <div class="timer" id="timer">30:00</div>
-    
-    
-<div id="quiz">
+    <div id="quiz">
     <div id="questions"></div>
     <div id="result" class="hidden">
         <div class="score">Score final: <span id="final-score">0</span>/20</div>
         <button onclick="location.reload()">Recommencer</button>
+     </div>
     </div>
-</div>
+    <div class="box"></div>
+    <div class="note"> <strong>* Une mauvaise réponse =  (-1 min ) du temps restant.</strong></div>
     
     <script>
     
-    
+
     
     
         const questions = [
@@ -326,15 +353,13 @@
     
     
     
-    
 
         let shuffledQuestions = [];
         let currentQuestion = 0;
         let score = 0;
         let timeLeft = 30 * 60;
         let timerId;
-
-        // Algorithme Fisher-Yates pour mélange aléatoire
+        
         function shuffleArray(array) {
             const arr = array.slice();
             for (let i = arr.length - 1; i > 0; i--) {
@@ -343,12 +368,8 @@
             }
             return arr;
         }
-
         function prepareQuestions() {
-            // Mélanger l'ordre des questions
             shuffledQuestions = shuffleArray(questions);
-            
-            // Mélanger les options et mettre à jour les bonnes réponses
             shuffledQuestions = shuffledQuestions.map(question => {
                 const originalCorrect = question.options[question.correct];
                 const shuffledOptions = shuffleArray(question.options);
@@ -359,48 +380,42 @@
                 };
             });
         }
-
         function startTimer() {
-    timerId = setInterval(() => {
-        timeLeft--;
-        updateTimer();
-        if(timeLeft <= 0) resetQuiztime(); // Restart on timeout
-    }, 1000);
-}
-
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if(timeLeft <= 0) resetQuiztime(); 
+            }, 1000);
+        }
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
             document.getElementById('timer').textContent = 
                 `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
-
-function resetQuiz() {
-    currentQuestion = 0 ;
-    score = 0;
-    timeLeft =  timeLeft - 60;
-    clearInterval(timerId);
-    prepareQuestions();
-    startTimer();
-    // Immediately update the timer display
-    document.getElementById('result').classList.add('hidden');
-    document.getElementById('questions').classList.remove('hidden');
-    showQuestion();
-}
-    function resetQuiztime() {
-    currentQuestion = 0;
-    score = 0;
-    timeLeft =  30 * 60 ;
-    clearInterval(timerId);
-    prepareQuestions();
-    startTimer();
-    updateTimer();
-    // Immediately update the timer display
-    document.getElementById('result').classList.add('hidden');
-    document.getElementById('questions').classList.remove('hidden');
-    showQuestion();
-}
-
+        function resetQuiz() {
+            currentQuestion = 0 ;
+            score = 0;
+            timeLeft =  timeLeft - 60;
+            clearInterval(timerId);
+            prepareQuestions();
+            startTimer();
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('questions').classList.remove('hidden');
+            showQuestion();
+        }     
+        function resetQuiztime() {
+            currentQuestion = 0;
+            score = 0;
+            timeLeft =  30 * 60 ;
+            clearInterval(timerId);
+            prepareQuestions();
+            startTimer();
+            updateTimer();
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('questions').classList.remove('hidden');
+            showQuestion();
+        }
         function handleAnswer(selectedIndex) {
             const q = shuffledQuestions[currentQuestion];
             const feedback = document.getElementById(`feedback-${currentQuestion}`);
@@ -430,14 +445,12 @@ function resetQuiz() {
             }
             feedback.classList.remove('hidden');
         }
-
         function endQuiz() {
              clearInterval(timerId);
              document.getElementById('questions').classList.add('hidden');
              document.getElementById('result').classList.remove('hidden');
              document.getElementById('final-score').textContent = score;
           }
-
         function showQuestion() {
             const q = shuffledQuestions[currentQuestion];
             const questionHTML = `
@@ -454,22 +467,11 @@ function resetQuiz() {
             document.getElementById('questions').innerHTML = questionHTML;
         }
 
-        // Initialisation
         prepareQuestions();
         startTimer();
         showQuestion();
+
     </script>
-    <style>
-  .box {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    margin-bottom: 20px; /* Adds space below each div */
-  }
-</style>
 
-
-<div class="box"></div>
-    <div class="note"> <strong>* Une mauvaise réponse =  (-1 min ) du temps restant.</strong></div>
 </body>
 </html>
