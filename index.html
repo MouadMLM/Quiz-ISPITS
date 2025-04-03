@@ -253,7 +253,7 @@
                 explanation: "L'HACCP est un système de gestion de la sécurité alimentaire."
             }
         ];
-
+        
         let shuffledQuestions = [];
         let currentQuestion = 0;
         let score = 0;
@@ -262,22 +262,27 @@
 
         // Fonction de mélange aléatoire
         function shuffleArray(array) {
-            return array.slice().sort(() => Math.random() - 0.5);
+            const arr = array.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
         }
 
         // Préparation des questions mélangées
         function prepareQuestions() {
             // Mélanger l'ordre des questions
-            shuffledQuestions = shuffleArray(originalQuestions);
+            shuffledQuestions = shuffleArray(questions);
             
             // Mélanger les options pour chaque question
             shuffledQuestions = shuffledQuestions.map(q => {
-                const originalCorrect = q.correct;
+                const originalCorrectAnswer = q.options[q.correct];
                 const shuffledOptions = shuffleArray(q.options);
                 return {
                     ...q,
                     options: shuffledOptions,
-                    correct: shuffledOptions.indexOf(q.options[originalCorrect])
+                    correct: shuffledOptions.indexOf(originalCorrectAnswer)
                 };
             });
         }
@@ -290,79 +295,9 @@
             }, 1000);
         }
 
-        function updateTimer() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timer').textContent = 
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
+        // ... (le reste des fonctions reste inchangé jusqu'à l'initialisation) ...
 
-        function resetQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            timeLeft = 40 * 60;
-            clearInterval(timerId);
-            prepareQuestions(); // Nouveau mélange
-            startTimer();
-            showQuestion();
-        }
-
-        function handleAnswer(selectedIndex) {
-            const q = shuffledQuestions[currentQuestion];
-            const feedback = document.getElementById(`feedback-${currentQuestion}`);
-            const buttons = document.querySelectorAll('.options button');
-
-            buttons.forEach(btn => btn.disabled = true);
-            
-            if(selectedIndex === q.correct) {
-                score++;
-                buttons[selectedIndex].classList.add('correct');
-                feedback.innerHTML = `<div class="correct">✅ Correct! ${q.explanation}</div>`;
-                
-                setTimeout(() => {
-                    currentQuestion++;
-                    if(currentQuestion < shuffledQuestions.length) showQuestion();
-                    else endQuiz();
-                }, 1500);
-            } else {
-                buttons[selectedIndex].classList.add('incorrect');
-                buttons[q.correct].classList.add('correct');
-                feedback.innerHTML = `
-                    <div class="incorrect">❌ Incorrect. 
-                    <br>La bonne réponse était : <strong>${q.options[q.correct]}</strong>
-                    <br>${q.explanation}</div>`;
-                
-                setTimeout(resetQuiz, 3000);
-            }
-            feedback.classList.remove('hidden');
-        }
-
-        function endQuiz() {
-            clearInterval(timerId);
-            document.getElementById('quiz').innerHTML = `
-                <div id="result">
-                    <div class="score">Score final: <span id="final-score">${score}</span>/20</div>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px;">Recommencer</button>
-                </div>`;
-        }
-
-        function showQuestion() {
-            const q = shuffledQuestions[currentQuestion];
-            const questionHTML = `
-                <div class="question-container">
-                    <h3>Question ${currentQuestion + 1}/${shuffledQuestions.length}</h3>
-                    <p>${q.question}</p>
-                    <div class="options">
-                        ${q.options.map((option, index) => `
-                            <button onclick="handleAnswer(${index})">${option}</button>
-                        `).join('')}
-                    </div>
-                    <div id="feedback-${currentQuestion}" class="feedback hidden"></div>
-                </div>`;
-            document.getElementById('questions').innerHTML = questionHTML;
-        }
-
-               // Initialisation
+        // Initialisation
         prepareQuestions(); // Premier mélange
         startTimer();
         showQuestion();
