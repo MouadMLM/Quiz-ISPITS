@@ -4,381 +4,276 @@
     <meta charset="UTF-8">
     <title>Quiz Industries Alimentaires</title>
     <style>
-
         body {
             font-family: Arial, sans-serif;
-            font-size: 20px;
-            height: 1800px;
+            font-size: 22px;
             max-width: 800px;
+            height : 1800px;
             margin: 20px auto;
             padding: 20px;
-            background: linear-gradient(#47ab30, #ffa6a6);
+            background: linear-gradient(#9b30ab, #13cbe0);
         }
         .Title {
             font-size: 50px;
             text-align: center;
             color: #fefefe;
-            
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-
             margin-bottom: 20px;
-            border-radius: 20px;
-        }
-        .note {
-            font-size: 26px;
-            color: #ffffff;
-            background-color: rgba(195, 20, 20, 0.919);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            padding: 20px 30px 20px 30px;
-            margin-bottom: 20px;
-            margin: 10px ;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
             border-radius: 20px;
         }
         .question-container {
-            
             background: #f8f9fa;
-            font-size: 35px;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        textarea {
+            font-style: Arial, sans-serif;
+            word-wrap: break-word;
+            justify-content: center;
+            font-size: 30px;
+            padding: 10px;
+            width: 95%;
+            margin: 20px 0;
+            border: 3px solid #ccc;
+            border-radius: 10px;
+        }
 
-        .options button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            font-size: 35px;
-            padding: 12px;
-            text-align: left;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .options button:hover {
-            background: #e9ecef;
-        }
-        .correct {
-            background: #d4edda !important;
-            border-color: #c3e6cb;
-        }
-        .incorrect {
-            background: #f8d7da !important;
-            border-color: #f5c6cb;
-        }
-        .feedback {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .score {
+        h4 {
             font-size: 1.5em;
             margin: 20px 0;
             padding: 15px;
-            background: #007bff;
+            background: #0558b1;
             color: white;
             border-radius: 8px;
             text-align: center;
         }
-        .hidden {
-            display: none;
+        h3 {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 15px;
+            background:#13cbe0;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
         }
+        .recom {
+            font-size: 25px;
+            padding: 15px 30px;
+            background:#2380f9;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button {
+            font-size: 35px;
+            padding: 20px 30px;
+            background:#9b30ab;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .questions {
+            font-size: 26px;
+        }
+        .results {
+            
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .answer {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid;
+        }
+
         .timer {
             position: fixed;
             top: 20px;
             right: 60px;
             font-size: 50px;
-            background: #ea1a2f;
-            color: white;
+            background: #ff0303;
+            color: rgb(255, 255, 255);
             padding: 10px 20px;
             border-radius: 5px;
         }
+        .correct {
+            color: green;
+            border: 1px solid green;
+        }
+        
+        .incorrect {
+            color: red;
+        }
 
         .box {
-            width: 80px;
-            height: 80px;
+            width: 20px;
+            height: 20px;
             margin-bottom: 20px; /* Adds space below each div */
           }
 
     </style>
 </head>
 <body>
+    <button id="recom" class="recom" onclick="location.reload()"> 🔄​ Recommencer </button>
     <div class="box"></div>
-    <div class="Title"><b>Quiz Industries Alimentaires</b></div>
+    <div class="Title"><b>Quiz Industries Alimentaires (3) </b></div>
     <div class="timer" id="timer">30:00</div>
     <div id="quiz">
-    <div id="questions"></div>
-    <div id="result" class="hidden">
-        <div class="score">Score final: <span id="final-score">0</span>/20</div>
-        <button onclick="location.reload()">Recommencer</button>
-     </div>
+        <div class="questions" id="questions" ></div>
+        <div id="results" class="hidden results"></div>
+        <div class="box"></div>
+        
     </div>
-    <div class="box"></div>
-    <div class="note"> <strong>* Une mauvaise réponse =  (-1 min ) du temps restant.</strong></div>
-    
+
     <script>
-    
-
-    
-    
         const questions = [
-            
-            {
-                question: "Quelle est la définition d'un aliment ?",
-                options: [
-                    "Substance chimique pure",
-                    "Produit transformé uniquement destiné à l'énergie",
-                    "Substance consommée pour fournir énergie et nutriments",
-                    "Produit synthétique enrichi en vitamines"
-                ],
-                correct: 2,
-                explanation: "Un aliment est une substance consommée pour fournir énergie et nutriments."
-            },
-            {
-                question: "Quelle méthode de conservation utilise une température entre 135 et 150°C pendant 1 à 5 secondes ?",
-                options: [
-                    "Pasteurisation",
-                    "Stérilisation",
-                    "Traitement UHT",
-                    "Lyophilisation"
-                ],
-                correct: 2,
-                explanation: "Le traitement UHT (Ultra Haute Température) est utilisé pour la conservation longue durée."
-            },
-            {
-                question: "Quel microorganisme est responsable du botulisme ?",
-                options: [
-                    "Salmonella spp.",
-                    "Clostridium botulinum",
-                    "Escherichia coli",
-                    "Listeria monocytogenes"
-                ],
-                correct: 1,
-                explanation: "Clostridium botulinum produit la toxine botulique responsable du botulisme."
-            },
-            {
-                question: "Quel facteur intrinsèque limite le développement des microorganismes dans un aliment ?",
-                options: [
-                    "La couleur",
-                    "Le pH",
-                    "L’emballage",
-                    "La température ambiante"
-                ],
-                correct: 1,
-                explanation: "Le pH acide ou basique peut inhiber la croissance microbienne."
-            },
-            {
-                question: "Quelle est la température idéale pour la congélation des aliments ?",
-                options: [
-                    "0°C",
-                    "-18°C",
-                    "4°C",
-                    "-5°C"
-                ],
-                correct: 1,
-                explanation: "La congélation se fait à -18°C pour une conservation optimale."
-            },
-            {
-                question: "Quelle substance antimicrobienne naturelle est présente dans l’ail ?",
-                options: [
-                    "Lysozyme",
-                    "Allicine",
-                    "Coumarine",
-                    "Polyphénols"
-                ],
-                correct: 1,
-                explanation: "L'ail contient de l'allicine aux propriétés antimicrobiennes."
-            },
-            {
-                question: "Quelle méthode des « 5 M » concerne le personnel et l’hygiène ?",
-                options: [
-                    "Matériel",
-                    "Méthode",
-                    "Milieu",
-                    "Main-d’œuvre"
-                ],
-                correct: 3,
-                explanation: "Le 'Main-d’œuvre' fait référence au personnel et à leurs pratiques d'hygiène."
-            },
-            {
-                question: "Quel niveau d’irradiation permet de stériliser les aliments en détruisant bactéries et virus ?",
-                options: [
-                    "Radurisation (<1 kGy)",
-                    "Radicidation (1-10 kGy)",
-                    "Radiopertisation (>10 kGy)",
-                    "Aucun des trois"
-                ],
-                correct: 2,
-                explanation: "La radiopertisation utilise des doses supérieures à 10 kGy pour stériliser."
-            },
-            {
-                question: "Quel critère de qualité alimentaire concerne l’absence de composés toxiques ?",
-                options: [
-                    "Nutritionnel",
-                    "Organoleptique",
-                    "Hygiénique",
-                    "Commercial"
-                ],
-                correct: 2,
-                explanation: "Le critère hygiénique garantit la sécurité sanitaire des aliments."
-            },
-            {
-                question: "Quel procédé de conservation réduit l’activité de l’eau (aw) ?",
-                options: [
-                    "Pasteurisation",
-                    "Séchage",
-                    "Congélation",
-                    "Emballage sous vide"
-                ],
-                correct: 1,
-                explanation: "Le séchage diminue l'eau disponible pour les microorganismes."
-            },
+        {
+            question: "Quelle est la principale technique utilisée pour conserver les aliments en les refroidissant sans les congeler ?",
+            correctAnswer: " La réfrigération",
+            explanation: "La réfrigération ralentit la croissance des micro-organismes en maintenant les aliments à basse température sans les congeler."
+        },
+        {
+            question: "Quelle méthode de conservation consiste à éliminer l’eau des aliments en les congelant puis en les déshydratant ?",
+            correctAnswer: " La lyophilisation",
+            explanation: "La lyophilisation combine congélation et déshydratation sous vide pour éliminer l’eau, préservant ainsi la structure des aliments."
+        },
+        {
+            question: "Quel est le rôle du sel dans la conservation des aliments ?",
+            correctAnswer: " Il absorbe l’eau et empêche le développement des micro-organismes",
+            explanation: "Le sel réduit l’activité de l’eau dans les aliments, créant un environnement hostile pour les micro-organismes."
+        },
+        {
+            question: "Quelle technique repose sur l’utilisation de températures élevées pour détruire les micro-organismes ?",
+            correctAnswer: " La pasteurisation",
+            explanation: "La pasteurisation utilise une chaleur modérée (ex: 72°C) pour éliminer les pathogènes sans altérer significativement le produit."
+        },
+        {
+            question: "Quelle est la principale différence entre la pasteurisation et la stérilisation ?",
+            correctAnswer: " La stérilisation utilise une température plus élevée que la pasteurisation",
+            explanation: "La stérilisation (ex: 121°C) détruit tous les micro-organismes, contrairement à la pasteurisation qui cible les pathogènes."
+        },
+        {
+            question: "À quel type de micro-organisme appartiennent les Pseudomonas ?",
+            correctAnswer: ") Bactéries",
+            explanation: "Les Pseudomonas sont des bactéries aérobies fréquemment responsables de la détérioration des aliments."
+        },
+        {
+            question: "Quel est l’effet principal des Pseudomonas sur les aliments ?",
+            correctAnswer: "Ils provoquent des altérations et des détériorations",
+            explanation: "es bactéries dégradent les protéines et les lipides, entraînant des odeurs et textures désagréables."
+        },
+        {
+            question: "Quel est l’environnement préféré des bactéries du genre Pseudomonas ?",
+            correctAnswer: " Milieux humides et aérobiques (présence d’oxygène)",
+            explanation: "Les Pseudomonas prospèrent dans les environnements humides et riches en oxygène, comme les viandes ou produits laitiers réfrigérés."
+        },
+        {
+            question: "Quels aliments sont les plus susceptibles d’être contaminés par Pseudomonas ?",
+            correctAnswer: " Les produits laitiers et les viandes réfrigérées",
+            explanation: "Leur capacité à se développer à basse température les rend problématiques pour les aliments réfrigérés."
+        },
+        {
+            question: "Quelle est la meilleure méthode pour limiter la prolifération des Pseudomonas dans les aliments ?",
+            correctAnswer: " Congélation et hygiène rigoureuse",
+            explanation: "La congélation stoppe leur croissance, et une hygiène stricte réduit les sources de contamination."
+        },
+        {
+            question: "Quelle est la principale source de contamination microbienne des aliments ?",
+            correctAnswer: " L’Homme et l’environnement",
+            explanation: "Les mains, les surfaces et l’air ambiant sont des vecteurs majeurs de contamination."
+        },
+        {
+            question: "Quel mode de contamination est lié à une mauvaise hygiène des mains lors de la manipulation des aliments ?",
+            correctAnswer: " Contamination biologique",
+            explanation: "Les microbes pathogènes (bactéries, virus) sont transférés via un contact non hygiénique."
+        },
+        {
+            question: "Quelle est la principale cause de contamination croisée dans une cuisine ?",
+            correctAnswer: " Utiliser les mêmes ustensiles pour les aliments crus et cuits",
+            explanation: "Les microbes des aliments crus peuvent contaminer les aliments cuits via les ustensiles partagés."
+        },
+        {
+            question: "Quel type de contamination peut être causé par des résidus de pesticides ou des additifs en excès ?",
+            correctAnswer: " Contamination chimique",
+            explanation: "Les substances chimiques indésirables altèrent la sécurité sanitaire des aliments."
+        },
+        {
+            question: "Quel facteur favorise le plus la prolifération des bactéries pathogènes dans les aliments ?",
+            correctAnswer: " Une température de conservation entre 20 °C et 45 °C",
+            explanation: "ette plage de température correspond à la zone de danger où les bactéries se multiplient rapidement."
+        },
+        {
+            question: "Quelle est la principale précaution à prendre lors de la manipulation de la viande crue ?",
+            correctAnswer: " Séparer la viande crue des autres aliments pour éviter la contamination croisée",
+            explanation: "Isoler la viande crue prévient la transmission de bactéries comme Salmonella ou E. coli."
+        },
+        {
+            question: "Pourquoi les produits laitiers doivent-ils être conservés au réfrigérateur ?",
+            correctAnswer: " Pour éviter la prolifération des bactéries pathogènes",
+            explanation: "Le froid ralentit la croissance microbienne, préservant la qualité et la sécurité des produits."
+        },
+        {
+            question: "Quelle est la meilleure méthode pour garantir la fraîcheur du poisson ?",
+            correctAnswer: " L’emballer hermétiquement et le placer au réfrigérateur entre 0 et 4 °C",
+            explanation: "Un emballage étanche et une basse température limitent l’oxydation et la croissance bactérienne."
+        },
+        {
+            question: "Quelle mesure est essentielle pour réduire la contamination des fruits et légumes ?",
+            correctAnswer: " Les laver soigneusement à l’eau potable avant consommation",
+            explanation: "Le lavage élimine les résidus de terre, pesticides et microbes présents en surface."
+        },
+        {
+            question: "Quelle est la meilleure façon de prévenir les intoxications alimentaires liées aux produits d’origine animale ?",
+            correctAnswer: " Bien cuire les viandes et poissons et respecter la chaîne du froid",
+            explanation: "La cuisson détruit les pathogènes, et la chaîne du froid empêche leur développement."
+        }
+    ];
 
-            
-            {
-                question: "Citez deux rôles des aliments.",
-                options: [
-                    "Fournir de l'énergie et des nutriments",
-                    "Colorer et aromatiser",
-                    "Décorer et emballer",
-                    "Conserver et transporter"
-                ],
-                correct: 0,
-                explanation: "Les aliments fournissent énergie et nutriments essentiels."
-            },
-            {
-                question: "Quelle est la différence entre un aliment et un nutriment ?",
-                options: [
-                    "L'aliment est composé de nutriments",
-                    "Le nutriment est synthétique",
-                    "Aucune différence",
-                    "L'aliment est une molécule simple"
-                ],
-                correct: 0,
-                explanation: "Les aliments contiennent des nutriments qui sont assimilés par l'organisme."
-            },
-            {
-                question: "Nommez trois agents d’altération des aliments.",
-                options: [
-                    "Microbes, enzymes, oxygène",
-                    "Couleurs, saveurs, textures",
-                    "Emballages, températures, pH",
-                    "Vitamines, minéraux, protéines"
-                ],
-                correct: 0,
-                explanation: "Les principaux agents d'altération sont biologiques, chimiques et physiques."
-            },
-            {
-                question: "Quels sont les trois types d’interactions entre bactéries dans les aliments ?",
-                options: [
-                    "Mutualisme, compétition, antagonisme",
-                    "Synergie, neutralité, coloration",
-                    "Croissance, division, sporulation",
-                    "Aucune interaction n'existe"
-                ],
-                correct: 0,
-                explanation: "Les bactéries interagissent par coopération, compétition ou inhibition."
-            },
-            {
-                question: "Quels facteurs environnementaux favorisent la croissance microbienne ?",
-                options: [
-                    "Température ambiante, humidité, pH neutre",
-                    "Lumière vive, sécheresse, froid",
-                    "Vide d'air, rayonnement, acidité",
-                    "Oxygène pur, obscurité, chaleur sèche"
-                ],
-                correct: 0,
-                explanation: "Conditions idéales : température modérée, humidité et pH neutre."
-            },
-            {
-                question: "Qu’est-ce que l’activité de l’eau (aw) ?",
-                options: [
-                    "Quantité d'eau disponible pour les réactions chimiques",
-                    "Quantité totale d'eau dans l'aliment",
-                    "pH de l'eau contenue",
-                    "Aucune de ces réponses"
-                ],
-                correct: 0,
-                explanation: "L'aw mesure l'eau libre utilisable par les microorganismes."
-            },
-            {
-                question: "Quels sont les buts principaux des industries alimentaires ?",
-                options: [
-                    "Sécurité, qualité, conservation",
-                    "Prix bas, rapidité, marketing",
-                    "Couleur vive, texture molle, goût sucré",
-                    "Aucun de ces choix"
-                ],
-                correct: 0,
-                explanation: "Les priorités sont la sécurité sanitaire et la qualité des produits."
-            },
-            {
-                question: "Citez deux méthodes de conservation par la chaleur.",
-                options: [
-                    "Pasteurisation et stérilisation",
-                    "Congélation et lyophilisation",
-                    "Irradiation et séchage",
-                    "Salage et fumage"
-                ],
-                correct: 0,
-                explanation: "Les méthodes thermiques incluent pasteurisation (chaleur modérée) et stérilisation (haute température)."
-            },
-            {
-                question: "Quelles sont les conséquences d’une contamination microbienne ?",
-                options: [
-                    "Altération du produit et risques sanitaires",
-                    "Amélioration du goût",
-                    "Augmentation de la valeur nutritive",
-                    "Aucun effet notable"
-                ],
-                correct: 0,
-                explanation: "La contamination peut rendre l'aliment dangereux ou impropre à la consommation."
-            },
-            {
-                question: "Quel est le rôle du système HACCP ?",
-                options: [
-                    "Identifier et contrôler les dangers alimentaires",
-                    "Améliorer le goût des produits",
-                    "Réduire les coûts de production",
-                    "Accélérer le processus de fabrication"
-                ],
-                correct: 0,
-                explanation: "L'HACCP est un système de gestion de la sécurité alimentaire."
-            }
-        ];
-    
-    
-    
-    
-    
-
-        let shuffledQuestions = [];
         let currentQuestion = 0;
+        const userAnswers = [];
         let score = 0;
         let timeLeft = 30 * 60;
         let timerId;
-        
-        function shuffleArray(array) {
-            const arr = array.slice();
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
+
+        function showQuestion() {
+           document.getElementById('recom').style.display = 'none';
+            const q = questions[currentQuestion];
+            const questionHTML = `
+                <div class="question-container">
+                    <h3>Question ${currentQuestion + 1}/${questions.length}</h3>
+                    <p>${q.question}</p>
+            
+                    <textarea class="input" id="answerInput" rows="4" cols="50" placeholder="Votre réponse . . ."> autocomplete="off"  </textarea>
+
+                    <div>
+                        ${currentQuestion > 0 ? 
+                            `<button onclick="previousQuestion()">Précédent</button>` : ''}
+                        <button onclick="nextQuestion()">
+                            ${currentQuestion === questions.length - 1 ? 'Terminer' : 'Suivant'}
+                        </button>
+                    </div>
+                </div>`;
+            document.getElementById('questions').innerHTML = questionHTML;
+            document.getElementById('answerInput').value = userAnswers[currentQuestion] || '';
         }
-        function prepareQuestions() {
-            shuffledQuestions = shuffleArray(questions);
-            shuffledQuestions = shuffledQuestions.map(question => {
-                const originalCorrect = question.options[question.correct];
-                const shuffledOptions = shuffleArray(question.options);
-                return {
-                    ...question,
-                    options: shuffledOptions,
-                    correct: shuffledOptions.indexOf(originalCorrect)
-                };
-            });
+        function resizeInput() {
+            const input = document.getElementById('myInput');
+            
+            // Reset height to the initial value
+            input.style.height = '30px';  // Reset height to prevent unnecessary growth
+            
+            // Adjust the height based on the scrollHeight of the input
+            input.style.height = (input.scrollHeight) + 'px';
         }
         function startTimer() {
             timerId = setInterval(() => {
@@ -393,85 +288,65 @@
             document.getElementById('timer').textContent = 
                 `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
-        function resetQuiz() {
-            currentQuestion = 0 ;
-            score = 0;
-            timeLeft =  timeLeft - 60;
-            clearInterval(timerId);
-            prepareQuestions();
-            startTimer();
-            document.getElementById('result').classList.add('hidden');
-            document.getElementById('questions').classList.remove('hidden');
-            showQuestion();
-        }     
-        function resetQuiztime() {
-            currentQuestion = 0;
-            score = 0;
-            timeLeft =  30 * 60 ;
-            clearInterval(timerId);
-            prepareQuestions();
-            startTimer();
-            updateTimer();
-            document.getElementById('result').classList.add('hidden');
-            document.getElementById('questions').classList.remove('hidden');
-            showQuestion();
-        }
-        function handleAnswer(selectedIndex) {
-            const q = shuffledQuestions[currentQuestion];
-            const feedback = document.getElementById(`feedback-${currentQuestion}`);
-            const buttons = document.querySelectorAll('.options button');
-
-            buttons.forEach(btn => btn.disabled = true);
-            
-            if(selectedIndex === q.correct) {
-                score++;
-                buttons[selectedIndex].classList.add('correct');
-                feedback.innerHTML = `<div class="correct">✅ Correct! ${q.explanation}</div>`;
-                
-                setTimeout(() => {
-                    currentQuestion++;
-                    if(currentQuestion < shuffledQuestions.length) showQuestion();
-                    else endQuiz();
-                }, 2500);
+        function nextQuestion() {
+            userAnswers[currentQuestion] = document.getElementById('answerInput').value;
+            if(currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
             } else {
-                buttons[selectedIndex].classList.add('incorrect');
-                buttons[q.correct].classList.add('correct');
-                feedback.innerHTML = `
-                    <div class="incorrect">❌ Incorrect. 
-                    <br>La bonne réponse était : <strong>${q.options[q.correct]}</strong>
-                    <br>${q.explanation}</div>`;
-                
-                setTimeout(resetQuiz, 4500);
+                showResults();
             }
-            feedback.classList.remove('hidden');
-        }
-        function endQuiz() {
-             clearInterval(timerId);
-             document.getElementById('questions').classList.add('hidden');
-             document.getElementById('result').classList.remove('hidden');
-             document.getElementById('final-score').textContent = score;
-          }
-        function showQuestion() {
-            const q = shuffledQuestions[currentQuestion];
-            const questionHTML = `
-                <div class="question-container">
-                    <h3>Question ${currentQuestion + 1}/${shuffledQuestions.length}</h3>
-                    <p>${q.question}</p>
-                    <div class="options">
-                        ${q.options.map((option, index) => `
-                            <button onclick="handleAnswer(${index})">${option}</button>
-                        `).join('')}
-                    </div>
-                    <div id="feedback-${currentQuestion}" class="feedback hidden"></div>
-                </div>`;
-            document.getElementById('questions').innerHTML = questionHTML;
         }
 
-        prepareQuestions();
+        function previousQuestion() {
+            userAnswers[currentQuestion] = document.getElementById('answerInput').value;
+            currentQuestion--;
+            showQuestion();
+        }
+        
+        function showResults() {
+            
+            let resultsHTML = '';
+            const score = calculateScore();  
+            resultsHTML += `<h4>Votre score final: ${score} / ${questions.length}</h4>`;
+            questions.forEach((q, index) => {
+                const userAnswer = userAnswers[index] || '(Aucune réponse)';
+                const isCorrect = userAnswer.toLowerCase() === q.correctAnswer.toLowerCase();
+               
+                resultsHTML += `
+                <div class="answer">
+                    <p><strong>Question ${index + 1}:</strong> ${q.question}</p>
+                    <p><b>Votre réponse: </b><span class="${isCorrect ? 'correct' : 'incorrect'}">${userAnswer}</span></p>
+                    <b>Réponse correcte: ${q.correctAnswer}</b>
+                    <p>Explication: ${q.explanation}</p>
+                </div>`;
+            });
+            document.getElementById('results').display = 'block'; 
+            document.getElementById('questions').style.display = 'none';
+            document.getElementById('results').innerHTML = resultsHTML;
+            clearInterval(timerId);  
+            document.getElementById('recom').style.display = 'block';  
+        }
+        function calculateScore() {
+            let score = 0; 
+        
+            questions.forEach((q, index) => {
+                const userAnswer = userAnswers[index] || '(Aucune réponse)';
+                const isCorrect = userAnswer.toLowerCase() === q.correctAnswer.toLowerCase();
+        
+                if (isCorrect) {
+                    score++;
+                }
+            });
+        
+            return score;
+        }
+        
+
         startTimer();
         showQuestion();
-
+        prepareQuestions();
+        
     </script>
-
 </body>
 </html>
